@@ -1,0 +1,23 @@
+.baseStyles{
+  color: black;
+  height: 100%;
+  text-decoration: none;
+  font-size:  large;
+  padding: 0px 10px;
+  display: flex;
+  align-items: center;
+  background-color: unset;
+  border: none;
+}
+
+.baseStyles:hover {
+
+  background-color: rgba(77, 96, 102, 0.4);
+}
+
+.activeRoute {
+  background-color: rgba(77, 96, 102, 0.7);
+}
+.activeRoute:hover {
+  background-color: rgba(77, 96, 102, 0.7);
+}
