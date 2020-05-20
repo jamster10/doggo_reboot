@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as Logo } from '../../assets/logo.svg'
 import { userContext } from '../../context'
 import { NavLinks } from './NavLinks';
 
@@ -30,7 +29,6 @@ export const Navbar = (): JSX.Element => {
 const Header = styled.header`
   height: 56px; 
   width: 100%;
-  position: fixed;
   display: flex;
   border-bottom: 1px solid black;
   justify-content: space-between;
