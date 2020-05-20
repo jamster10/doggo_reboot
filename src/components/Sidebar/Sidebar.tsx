@@ -19,17 +19,19 @@ export const Sidebar = ({
 };
 
 const Container = styled.div`
-	height: 100vh;
+	height: calc(100vh - 57px);
 	max-width: 350px;
 	position: relative;
 	right: 1000;
+	flex: 1;
+	border-left: 1px solid black;
 `;
 const Header = styled.div`
 	padding: 20px;
 	text-align: center;
 	font-size: medium;
 	border-bottom: 1px solid black;
-	border-left: 1px solid black;
+	
 `;
 
 const Div = styled.div`
