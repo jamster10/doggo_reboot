@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { userContext } from "../../context";
 
 declare global {
 	interface Window {
@@ -8,27 +9,29 @@ declare global {
 	}
 }
 
-export const MapContainer = (): JSX.Element => {
+export const MapContainer = React.memo(() => {
+	const { state } = React.useContext(userContext);
 	const mapRef = React.useRef(null);
 
 	React.useEffect(() => {
-		console.log(process.env.REACT_APP_G_MAPS_KEY);
-		if (mapRef.current) {
-      console.log(mapRef.current);
-      loadScript()
+		if (mapRef.current && state.userLocation?.city) {
+			loadScript();
 		}
-	}, [mapRef]);
+	}, [mapRef, state.userLocation]);
 
 	const initMap = () => {
 		const map = new window.google.maps.Map(mapRef.current, {
-			center: { lat: -34.397, lng: 150.644 },
+			center: {
+				lat: state.userLocation?.lat,
+				lng: state.userLocation?.lon,
+			},
 			zoom: 8,
 		});
 	};
 	window.initMap = initMap;
 
 	return <Div ref={mapRef}></Div>;
-};
+});
 
 const loadScript = () => {
 	const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_G_MAPS_KEY}&libraries=places&callback=initMap`;
@@ -42,6 +45,6 @@ const loadScript = () => {
 };
 
 const Div = styled.div`
-height: calc(100vh-57px);
-flex: 2
-`
+	height: calc(100vh-57px);
+	flex: 2;
+`;

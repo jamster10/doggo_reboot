@@ -1,26 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom'
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 
-import App from './App';
-import { GlobalStyle } from './GlobalStyles';
-
+import App from "./App";
+import { UserProvider } from "./context";
+import { GlobalStyle } from "./GlobalStyles";
 
 const Root = () => {
-
-  return (
-    <BrowserRouter>
-      <App/>
-    </BrowserRouter>
-  )
-}
+	return (
+		<UserProvider>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</UserProvider>
+	);
+};
 
 ReactDOM.render(
-  <React.StrictMode>
-    <GlobalStyle/>
-    <Root/>
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<GlobalStyle />
+		<Root />
+	</React.StrictMode>,
+	document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

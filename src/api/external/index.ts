@@ -1,2 +1,1 @@
-export * from './externalApi'
-'
+export * from "./externalApi";
