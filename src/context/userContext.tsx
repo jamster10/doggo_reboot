@@ -17,7 +17,7 @@ const initialState = {
 	userLocation: null,
 };
 
-export const userContext = React.createContext<{
+export const UserContext = React.createContext<{
 	state: User;
 	dispatch: React.Dispatch<UserActionTypes>;
 }>({
@@ -25,7 +25,7 @@ export const userContext = React.createContext<{
 	dispatch: () => null,
 });
 
-const { Provider } = userContext;
+const { Provider } = UserContext;
 
 export const UserProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = React.useReducer(

@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { userContext } from "../../context";
+import { UserContext } from "../../context";
 import { NavLinks } from "./NavLinks";
 
 export const Navbar = (): JSX.Element => {
-	const { state, dispatch } = React.useContext(userContext);
+	const { state, dispatch } = React.useContext(UserContext);
 	console.log(state.currentUser);
 	if (state.currentUser === null) {
 		console.log("no user");

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { userContext } from "../../context";
+import { UserContext } from "../../context";
 
 declare global {
 	interface Window {
@@ -10,7 +10,7 @@ declare global {
 }
 
 export const MapContainer = React.memo(() => {
-	const { state } = React.useContext(userContext);
+	const { state } = React.useContext(UserContext);
 	const mapRef = React.useRef(null);
 
 	React.useEffect(() => {

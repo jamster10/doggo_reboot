@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 import { getUserLocation } from "./api";
 import { MapContainer, Navbar, Sidebar } from "./components";
-import { userContext } from "./context";
+import { UserContext } from "./context";
 
 function App() {
-	const { dispatch } = React.useContext(userContext);
+	const { dispatch } = React.useContext(UserContext);
 
 	React.useEffect(() => {
 		const setLocation = async () => {
