@@ -4,23 +4,21 @@ import styled from "styled-components";
 import { Input, Label } from '../DesignComponents'
 import { useForm } from "../../hooks";
 
-interface SignUpFields {
+interface LoginFields {
 	username: string;
 	password: string;
-	confirmPassword: string;
 }
 
-type FormErrors = SignUpFields;
+type FormErrors = LoginFields;
 
-const initialFields: SignUpFields | FormErrors = {
+const initialFields: LoginFields | FormErrors = {
 	username: "",
 	password: "",
-	confirmPassword: "",
 };
 
-export const SignUp = () => {
+export const Login = (): JSX.Element => {
 	const [errors, setErrors] = React.useState<FormErrors>(initialFields);
-	const [values, handleChange] = useForm<SignUpFields>(initialFields);
+	const [values, handleChange] = useForm<LoginFields>(initialFields);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -31,7 +29,7 @@ export const SignUp = () => {
 		}
 	};
 
-	const { username, password, confirmPassword } = values;
+	const { username, password } = values;
 	return (
 		<>
 			<form>
@@ -54,28 +52,18 @@ export const SignUp = () => {
 					value={password}
 					onChange={handleChange}
 				/>
-				<Label htmlFor="confirmPassword">Confirm Password:</Label>
-				<Input
-					type="text"
-					id="confirmPassword"
-					name="confirmPassword"
-					maxLength={60} 
-					minLength={8}
-					value={confirmPassword}
-					onChange={handleChange}
-				/>
 				<ButtonContainer>
-					<Button onClick={handleSubmit}>Sign Up!</Button>
+					<Button onClick={handleSubmit}>Login!</Button>
 				</ButtonContainer>
 			</form>
 		</>
 	);
 };
 
-const checkInputs = (fields: SignUpFields): FormErrors | undefined => {
+const checkInputs = (fields: LoginFields): FormErrors | undefined => {
 	let hasErrors = false;
 	const errors = {} as FormErrors;
-	let field: keyof SignUpFields;
+	let field: keyof LoginFields;
 	for (field in fields) {
 		if (!fields[field]) {
 			hasErrors = true;

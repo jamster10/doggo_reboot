@@ -2,9 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 import { getUserLocation } from "./api";
-import { MapContainer, Navbar, Sidebar } from "./components";
+import { MapContainer, Navbar} from "./components";
 import { UserContext } from "./context";
-import { Routes } from "./components/Routes";
 
 function App() {
 	const { dispatch } = React.useContext(UserContext);
@@ -24,9 +23,6 @@ function App() {
 			<Navbar />
 			<Main>
 				<MapContainer />
-				<Sidebar>
-					<Routes/>
-				</Sidebar>
 			</Main>
 		</>
 	);
@@ -34,8 +30,6 @@ function App() {
 
 const Main = styled.main`
 	height: 100%;
-	display: flex;
-	flex-wrap: no-wrap;
 `;
 
 export default App;

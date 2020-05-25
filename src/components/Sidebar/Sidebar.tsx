@@ -2,18 +2,16 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-export const Sidebar = ({
-	children,
-}: {
-	children: JSX.Element;
-}): JSX.Element => {
+import { Routes } from "..";
+
+export const Sidebar = (): JSX.Element => {
 	const { pathname } = useLocation();
 	const message = getMessage(pathname);
 
 	return (
 		<Container>
 			<Header>{message}</Header>
-			<Div>{children}</Div>
+			<Div><Routes/></Div>
 		</Container>
 	);
 };

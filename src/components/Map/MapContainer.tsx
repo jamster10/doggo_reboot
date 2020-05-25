@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { UserContext } from "../../context";
+import { Sidebar } from "..";
 
 declare global {
 	interface Window {
@@ -12,6 +13,7 @@ declare global {
 export const MapContainer = React.memo(() => {
 	const { state } = React.useContext(UserContext);
 	const mapRef = React.useRef(null);
+	let map: any;
 
 	React.useEffect(() => {
 		if (mapRef.current && state.userLocation?.city) {
@@ -20,7 +22,10 @@ export const MapContainer = React.memo(() => {
 	}, [mapRef, state.userLocation]);
 
 	const initMap = () => {
-		const map = new window.google.maps.Map(mapRef.current, {
+		map = new window.google.maps.Map(mapRef.current, {
+			streetViewControl: false,
+			mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+			mapTypeControl: false,
 			center: {
 				lat: state.userLocation?.lat,
 				lng: state.userLocation?.lon,
@@ -30,7 +35,12 @@ export const MapContainer = React.memo(() => {
 	};
 	window.initMap = initMap;
 
-	return <Div ref={mapRef}></Div>;
+	return (
+		<Div>
+			<MapDiv ref={mapRef}></MapDiv>
+			<Sidebar/>
+		</Div>
+	);
 });
 
 const loadScript = () => {
@@ -44,7 +54,11 @@ const loadScript = () => {
 	index.parentNode!.insertBefore(script, index);
 };
 
-const Div = styled.div`
+const MapDiv = styled.div`
 	height: calc(100vh-57px);
 	flex: 2;
+`;
+const Div = styled.div`
+	display: flex;
+	flex-wrap: no-wrap;
 `;
