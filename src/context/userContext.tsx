@@ -1,14 +1,18 @@
 import React from "react";
 import { UserActionTypes } from "./actions";
 
-export type Locale = {
+export interface Locale {
 	lat: number;
 	lon: number;
 	city: string;
-};
+}
 
 export interface User {
-	currentUser: null | string;
+		username: string
+}
+
+export interface UserInfo {
+	currentUser: null | User;
 	userLocation: null | Locale;
 }
 
@@ -18,7 +22,7 @@ const initialState = {
 };
 
 export const UserContext = React.createContext<{
-	state: User;
+	state: UserInfo;
 	dispatch: React.Dispatch<UserActionTypes>;
 }>({
 	state: initialState,
@@ -29,7 +33,7 @@ const { Provider } = UserContext;
 
 export const UserProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = React.useReducer(
-		(state: User, action: UserActionTypes) => {
+		(state: UserInfo, action: UserActionTypes) => {
 			switch (action.type) {
 				case "SET_USER_LOCATION":
 					return {

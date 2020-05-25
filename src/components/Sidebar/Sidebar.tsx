@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 export const Sidebar = ({
@@ -7,8 +7,8 @@ export const Sidebar = ({
 }: {
 	children: JSX.Element;
 }): JSX.Element => {
-	const { path } = useRouteMatch();
-	const message = path === "/my-places" ? "My Places" : "Welcome to Doggo!";
+	const { pathname } = useLocation();
+	const message = getMessage(pathname);
 
 	return (
 		<Container>
@@ -18,10 +18,24 @@ export const Sidebar = ({
 	);
 };
 
+const getMessage = (path: string): string => {
+	switch (path) {
+		case "/my-places":
+			return "My Places";
+		case "/sign-up":
+			return "Sign up to save your places.";
+		case "/login":
+			return "Welcome back!";
+		default:
+			return "Welcome to Doggo!";
+	}
+};
+
 const Container = styled.div`
 	height: calc(100vh - 57px);
 	max-width: 350px;
 	position: relative;
+	padding: 0px 30px;
 	right: 1000;
 	flex: 1;
 	border-left: 1px solid black;
@@ -31,7 +45,6 @@ const Header = styled.div`
 	text-align: center;
 	font-size: medium;
 	border-bottom: 1px solid black;
-	
 `;
 
 const Div = styled.div`
