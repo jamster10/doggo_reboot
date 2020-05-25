@@ -45,6 +45,7 @@ const Header = styled.div`
 	text-align: center;
 	font-size: medium;
 	border-bottom: 1px solid black;
+	margin-bottom: 12px;
 `;
 
 const Div = styled.div`

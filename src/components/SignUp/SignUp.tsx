@@ -98,7 +98,6 @@ const Label = styled.label`
 const Input = styled.input`
 	background-color: unset;
 	display: block;
-	padding: 4px 8px;
 	margin-bottom: 16px;
 	border: 1px solid black;
 	height: 25px;

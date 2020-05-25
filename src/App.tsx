@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getUserLocation } from "./api";
 import { MapContainer, Navbar, Sidebar } from "./components";
 import { UserContext } from "./context";
+import { Routes } from "./components/Routes";
 
 function App() {
 	const { dispatch } = React.useContext(UserContext);
@@ -24,7 +25,7 @@ function App() {
 			<Main>
 				<MapContainer />
 				<Sidebar>
-					<div>Test</div>
+					<Routes/>
 				</Sidebar>
 			</Main>
 		</>
