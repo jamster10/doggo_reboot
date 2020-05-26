@@ -2,6 +2,8 @@ import React from "react";
 
 import { useForm } from "../../hooks";
 import { Input, Label } from "../DesignComponents";
+import styled from "styled-components";
+// import { Checkbox } from './Checkbox'
 
 interface SearchFields {
 	origin: string;
@@ -13,12 +15,17 @@ const initialFields: SearchFields = {
 	destination: "",
 };
 
-export const SearchForm = (): JSX.Element => {
+interface Props {
+	isVisible: boolean;
+}
+
+export const SearchForm = ({ isVisible }: Props): JSX.Element => {
 	const [values, handleChange] = useForm<SearchFields>(initialFields);
+
 	const handleSearch = () => {};
 
 	return (
-		<form>
+		<Form isVisible={isVisible}>
 			<Label htmlFor="origin">Start:</Label>
 			<Input
 				type="text"
@@ -38,6 +45,12 @@ export const SearchForm = (): JSX.Element => {
 			<button className="search-btn" type="button" onClick={handleSearch}>
 				Search!
 			</button>
-		</form>
+		</Form>
 	);
 };
+
+const Form = styled.form`
+	display: ${(props: Props) => {
+		return props.isVisible ? "block" : "none";
+	}};
+`;

@@ -5,15 +5,22 @@ import { Login, SearchForm, SignUp } from "../";
 
 export const Routes = (): JSX.Element => {
 	return (
-		<Switch>
-			<Route exact path="/sign-up" component={SignUp} />
+		<>
 			<Route
-				exact
-				path="/my-places"
-				render={() => <div>My Places</div>}
+				path="/"
+				children={({ match }: { match: { isExact: boolean } }) => (
+					<SearchForm isVisible={match.isExact} />
+				)}
 			/>
-			<Route exact path="/login" component={Login} />
-			<Route exact path="/" component={SearchForm} />
-		</Switch>
+			<Switch>
+				<Route exact path="/sign-up" component={SignUp} />
+				<Route
+					exact
+					path="/my-places"
+					render={() => <div>My Places</div>}
+				/>
+				<Route exact path="/login" component={Login} />
+			</Switch>
+		</>
 	);
 };

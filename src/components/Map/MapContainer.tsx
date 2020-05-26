@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+
 import { UserContext } from "../../context";
 import { Sidebar } from "..";
+import { AutocompleteDirectionsHandler } from "./autoCompleteDirectionsHandler";
+
+// import RouteBoxer from './routeBoxer'
 
 declare global {
 	interface Window {
@@ -13,7 +17,6 @@ declare global {
 export const MapContainer = React.memo(() => {
 	const { state } = React.useContext(UserContext);
 	const mapRef = React.useRef(null);
-	let map: any;
 
 	React.useEffect(() => {
 		if (mapRef.current && state.userLocation?.city) {
@@ -21,8 +24,8 @@ export const MapContainer = React.memo(() => {
 		}
 	}, [mapRef, state.userLocation]);
 
-	const initMap = () => {
-		map = new window.google.maps.Map(mapRef.current, {
+	const initMap = async () => {
+		const map = new window.google.maps.Map(mapRef.current, {
 			streetViewControl: false,
 			mapTypeId: window.google.maps.MapTypeId.ROADMAP,
 			mapTypeControl: false,
@@ -32,20 +35,21 @@ export const MapContainer = React.memo(() => {
 			},
 			zoom: 8,
 		});
+		new AutocompleteDirectionsHandler(map);
 	};
 	window.initMap = initMap;
 
 	return (
 		<Div>
 			<MapDiv ref={mapRef}></MapDiv>
-			<Sidebar/>
+			<Sidebar />
 		</Div>
 	);
 });
 
-const loadScript = () => {
-	const url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_G_MAPS_KEY}&libraries=places&callback=initMap`;
-
+const loadScript = (
+	url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_G_MAPS_KEY}&libraries=places&callback=initMap`
+) => {
 	const index = window.document.getElementsByTagName("script")[0];
 	const script = window.document.createElement("script");
 	script.src = url;
@@ -58,6 +62,7 @@ const MapDiv = styled.div`
 	height: calc(100vh-57px);
 	flex: 2;
 `;
+
 const Div = styled.div`
 	display: flex;
 	flex-wrap: no-wrap;
