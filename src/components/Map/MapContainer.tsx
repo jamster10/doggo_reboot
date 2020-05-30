@@ -1,22 +1,36 @@
 import React from "react";
 import styled from "styled-components";
 
-import { UserContext } from "../../context";
+import { SearchContext, UserContext } from "../../context";
 import { Sidebar } from "..";
 import { AutocompleteDirectionsHandler } from "./autoCompleteDirectionsHandler";
 
-// import RouteBoxer from './routeBoxer'
-
-declare global {
-	interface Window {
-		google: any;
-		initMap: () => void;
-	}
+interface AutocompleteHandler {
+	route: () => void;
 }
 
 export const MapContainer = React.memo(() => {
 	const { state } = React.useContext(UserContext);
+	const { dispatch: searchDispatch } = React.useContext(SearchContext);
+
 	const mapRef = React.useRef(null);
+
+	const [
+		autocompletHandler,
+		setAutocompleteHandler,
+	] = React.useState<null | AutocompleteHandler>(null);
+
+	React.useEffect(() => {
+		if (autocompletHandler) {
+			const beginSearch = autocompletHandler.route.bind(
+				autocompletHandler
+			);
+			searchDispatch({
+				type: "SET_SEARCH_CALLBACK",
+				payload: beginSearch,
+			});
+		}
+	}, [autocompletHandler, searchDispatch]);
 
 	React.useEffect(() => {
 		if (mapRef.current && state.userLocation?.city) {
@@ -35,7 +49,7 @@ export const MapContainer = React.memo(() => {
 			},
 			zoom: 8,
 		});
-		new AutocompleteDirectionsHandler(map);
+		setAutocompleteHandler(new AutocompleteDirectionsHandler(map));
 	};
 	window.initMap = initMap;
 

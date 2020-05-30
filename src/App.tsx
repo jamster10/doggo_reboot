@@ -2,8 +2,17 @@ import React from "react";
 import styled from "styled-components";
 
 import { getUserLocation } from "./api";
-import { MapContainer, Navbar} from "./components";
-import { UserContext } from "./context";
+import { MapContainer, Navbar } from "./components";
+import { SearchProvider, UserContext } from "./context";
+
+declare global {
+	interface Window {
+		google: {
+			maps: any;
+		};
+		initMap: () => void;
+	}
+}
 
 function App() {
 	const { dispatch } = React.useContext(UserContext);
@@ -22,7 +31,9 @@ function App() {
 		<>
 			<Navbar />
 			<Main>
-				<MapContainer />
+				<SearchProvider>
+					<MapContainer />
+				</SearchProvider>
 			</Main>
 		</>
 	);

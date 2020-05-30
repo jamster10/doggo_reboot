@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Input, Label } from '../DesignComponents'
+import { Button, Input, Label } from '../DesignComponents'
 import { useForm } from "../../hooks";
 
 interface SignUpFields {
@@ -95,16 +95,4 @@ const ButtonContainer = styled.div`
 	text-align: center;
 	padding-top: 12px;
 	width: 100%;
-`;
-
-const Button = styled.button`
-	height: 40px;
-	padding: 10px 20px;
-	border: 1px solid black;
-	background-color: transparent;
-	&:hover {
-		color: white;
-		border: 1px solid white;
-	}
-	cursor: pointer;
 `;

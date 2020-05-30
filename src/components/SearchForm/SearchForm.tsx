@@ -1,50 +1,48 @@
 import React from "react";
-
-import { useForm } from "../../hooks";
-import { Input, Label } from "../DesignComponents";
 import styled from "styled-components";
-// import { Checkbox } from './Checkbox'
 
-interface SearchFields {
-	origin: string;
-	destination: string;
-}
-
-const initialFields: SearchFields = {
-	origin: "",
-	destination: "",
-};
+import { Button, Input, Label } from "../DesignComponents";
+import { SearchContext } from "../../context";
 
 interface Props {
 	isVisible: boolean;
 }
 
 export const SearchForm = ({ isVisible }: Props): JSX.Element => {
-	const [values, handleChange] = useForm<SearchFields>(initialFields);
+	const { state, dispatch } = React.useContext(SearchContext);
+	const originRef = React.useRef<null | HTMLInputElement>(null);
+	const destinationRef = React.useRef<null | HTMLInputElement>(null);
 
-	const handleSearch = () => {};
+	const handleSearch = () => {
+		if (originRef.current && destinationRef.current) {
+			const destination = destinationRef.current.value;
+			const origin = originRef.current.value;
+
+			dispatch({
+				type: "SET_QUERY_LOCATIONS",
+				payload: {
+					origin,
+					destination,
+				},
+			});
+			state.beginSearch();
+		}
+	};
 
 	return (
 		<Form isVisible={isVisible}>
 			<Label htmlFor="origin">Start:</Label>
-			<Input
-				type="text"
-				name="origin"
-				id="origin"
-				value={values.origin}
-				onChange={handleChange}
-			/>
+			<Input type="text" name="origin" id="origin" ref={originRef} />
 			<Label htmlFor="destination">End:</Label>
 			<Input
 				type="text"
 				name="destination"
 				id="destination"
-				value={values.destination}
-				onChange={handleChange}
+				ref={destinationRef}
 			/>
-			<button className="search-btn" type="button" onClick={handleSearch}>
+			<Button type="button" onClick={handleSearch}>
 				Search!
-			</button>
+			</Button>
 		</Form>
 	);
 };

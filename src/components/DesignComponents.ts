@@ -13,5 +13,17 @@ export const Input = styled.input`
 	height: 25px;
 	width: 100%;
 	border-radius: 5px;
-	padding: 4px 8px
+	padding: 4px 8px;
+`;
+
+export const Button = styled.button`
+	height: 40px;
+	padding: 10px 20px;
+	border: 1px solid black;
+	background-color: transparent;
+	&:hover {
+		color: white;
+		border: 1px solid white;
+	}
+	cursor: pointer;
 `;
