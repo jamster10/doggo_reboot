@@ -15,6 +15,12 @@ export const setSearchCallback = (callback: (params: string[]) => void) =>
 		payload: callback,
 	};
 
+export const SET_READY = "SET_READY";
+export const setReady = () =>
+	<const>{
+		type: SET_READY,
+	};
+
 export const SET_QUERY = "SET_QUERY";
 export const setQuery = ({ origin, destination, params }: Search) =>
 	<const>{
@@ -24,5 +30,5 @@ export const setQuery = ({ origin, destination, params }: Search) =>
 
 export type UserActionTypes = ReturnType<typeof setUserLocation>;
 export type SearchActionTypes = ReturnType<
-	typeof setSearchCallback | typeof setQuery
+	typeof setSearchCallback | typeof setQuery | typeof setReady
 >;

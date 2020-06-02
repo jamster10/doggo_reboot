@@ -6,6 +6,7 @@ export interface Search {
 	origin: string | null;
 	destination: string | null;
 	params: string[];
+	isReady: boolean;
 }
 
 const initialState: Search = {
@@ -13,6 +14,7 @@ const initialState: Search = {
 	origin: null,
 	destination: null,
 	params: [],
+	isReady: false,
 };
 
 export const SearchContext = React.createContext<{
@@ -29,6 +31,11 @@ export const SearchProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = React.useReducer(
 		(state: Search, action: SearchActionTypes) => {
 			switch (action.type) {
+				case "SET_READY":
+					return {
+						...state,
+						isReady: true,
+					};
 				case "SET_SEARCH_CALLBACK":
 					return {
 						...state,

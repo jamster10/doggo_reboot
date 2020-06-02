@@ -18,7 +18,6 @@ function App() {
 	const { dispatch } = React.useContext(UserContext);
 
 	React.useEffect(() => {
-		console.log("i run");
 		const setLocation = async () => {
 			dispatch({
 				type: "SET_USER_LOCATION",
@@ -39,7 +38,7 @@ function App() {
 }
 
 const Main = styled.main`
-	height: 100%;
+	height: calc(100vh - 57px);
 `;
 
 export default App;

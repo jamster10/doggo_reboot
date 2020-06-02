@@ -72,9 +72,16 @@ export const SearchForm = ({ isVisible }: Props): JSX.Element => {
 	return (
 		<Form isVisible={isVisible}>
 			<Label htmlFor="origin">Start:</Label>
-			<Input type="text" name="origin" id="origin" ref={originRef} />
+			<Input
+				disabled={!state.isReady}
+				type="text"
+				name="origin"
+				id="origin"
+				ref={originRef}
+			/>
 			<Label htmlFor="destination">End:</Label>
 			<Input
+				disabled={!state.isReady}
 				type="text"
 				name="destination"
 				id="destination"

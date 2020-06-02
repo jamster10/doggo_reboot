@@ -1,3 +1,4 @@
+export * from "./LoadingGif";
 export * from "./Login";
 export * from "./Map";
 export * from "./Navbar";

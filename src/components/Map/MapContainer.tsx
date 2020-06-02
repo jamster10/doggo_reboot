@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { SearchContext, UserContext, Search } from "../../context";
-import { Sidebar } from "..";
+import { LoadingGif, Sidebar } from "..";
 import { AutocompleteDirectionsHandler } from "./autoCompleteDirectionsHandler";
 
 interface AutocompleteHandler {
@@ -32,12 +32,15 @@ export const MapContainer = () => {
 				type: "SET_SEARCH_CALLBACK",
 				payload: beginSearch,
 			});
+			searchDispatch({
+				type: "SET_READY",
+			});
 		}
 	}, [autocompleteHandler, searchDispatch]);
 
 	React.useEffect(() => {
 		if (mapRef.current && state.userLocation?.city) {
-			loadScript();
+			// loadScript();
 		}
 	}, [mapRef, state.userLocation]);
 
@@ -58,7 +61,10 @@ export const MapContainer = () => {
 
 	return (
 		<Div>
-			<MapDiv ref={mapRef}></MapDiv>
+			<LeftSection>
+				{!autocompleteHandler && <LoadingGif />}
+				<MapDiv isLoaded={!!autocompleteHandler} ref={mapRef}></MapDiv>
+			</LeftSection>
 			<Sidebar />
 		</Div>
 	);
@@ -76,11 +82,18 @@ const loadScript = (
 };
 
 const MapDiv = styled.div`
-	height: calc(100vh-57px);
+	height: ${({isLoaded}: {isLoaded: boolean}) => isLoaded ? 'calc(100vh - 57px)' : 'calc(100vh - 200px)'}
+`;
+
+const LeftSection = styled.div`
 	flex: 2;
+	height: calc(100vh - 57px);
 `;
 
 const Div = styled.div`
+	position: relative;
 	display: flex;
+	height: calc(100vh-57px);
+	overflow-y: 'hidden'
 	flex-wrap: no-wrap;
 `;
