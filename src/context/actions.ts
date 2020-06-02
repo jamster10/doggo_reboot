@@ -1,4 +1,5 @@
 import { Locale } from "./UserContext";
+import { Search } from ".";
 
 export const SET_USER_LOCATION = "SET_USER_LOCATION";
 export const setUserLocation = (locale: Locale) =>
@@ -8,18 +9,20 @@ export const setUserLocation = (locale: Locale) =>
 	};
 
 export const SET_SEARCH_CALLBACK = "SET_SEARCH_CALLBACK";
-export const setSearchCallback = (callback: ()=>void) =>
+export const setSearchCallback = (callback: (params: string[]) => void) =>
 	<const>{
 		type: SET_SEARCH_CALLBACK,
 		payload: callback,
 	};
 
-export const SET_QUERY_LOCATIONS = "SET_QUERY_LOCATIONS";
-export const setQueryLocations = ({origin = '', destination = ''}) =>
+export const SET_QUERY = "SET_QUERY";
+export const setQuery = ({ origin, destination, params }: Search) =>
 	<const>{
-		type: SET_QUERY_LOCATIONS,
-		payload: {origin, destination},
+		type: SET_QUERY,
+		payload: { origin, destination, params },
 	};
 
 export type UserActionTypes = ReturnType<typeof setUserLocation>;
-export type SearchActionTypes = ReturnType<typeof setSearchCallback | typeof setQueryLocations>;
+export type SearchActionTypes = ReturnType<
+	typeof setSearchCallback | typeof setQuery
+>;

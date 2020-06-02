@@ -3,15 +3,17 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { UserProvider } from "./context";
+import { SearchProvider, UserProvider } from "./context";
 import { GlobalStyle } from "./GlobalStyles";
 
 const Root = () => {
 	return (
 		<UserProvider>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
+			<SearchProvider>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</SearchProvider>
 		</UserProvider>
 	);
 };

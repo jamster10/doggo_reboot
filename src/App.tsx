@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { getUserLocation } from "./api";
 import { MapContainer, Navbar } from "./components";
-import { SearchProvider, UserContext } from "./context";
+import { UserContext } from "./context";
 
 declare global {
 	interface Window {
@@ -18,6 +18,7 @@ function App() {
 	const { dispatch } = React.useContext(UserContext);
 
 	React.useEffect(() => {
+		console.log("i run");
 		const setLocation = async () => {
 			dispatch({
 				type: "SET_USER_LOCATION",
@@ -31,9 +32,7 @@ function App() {
 		<>
 			<Navbar />
 			<Main>
-				<SearchProvider>
-					<MapContainer />
-				</SearchProvider>
+				<MapContainer />
 			</Main>
 		</>
 	);

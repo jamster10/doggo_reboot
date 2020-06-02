@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { SearchContext, UserContext } from "../../context";
+import { SearchContext, UserContext, Search } from "../../context";
 import { Sidebar } from "..";
 import { AutocompleteDirectionsHandler } from "./autoCompleteDirectionsHandler";
 
@@ -9,28 +9,31 @@ interface AutocompleteHandler {
 	route: () => void;
 }
 
-export const MapContainer = React.memo(() => {
+interface Props {
+	searchState: Search;
+}
+
+export const MapContainer = () => {
 	const { state } = React.useContext(UserContext);
 	const { dispatch: searchDispatch } = React.useContext(SearchContext);
 
 	const mapRef = React.useRef(null);
-
 	const [
-		autocompletHandler,
+		autocompleteHandler,
 		setAutocompleteHandler,
 	] = React.useState<null | AutocompleteHandler>(null);
 
 	React.useEffect(() => {
-		if (autocompletHandler) {
-			const beginSearch = autocompletHandler.route.bind(
-				autocompletHandler
+		if (autocompleteHandler) {
+			const beginSearch = autocompleteHandler.route.bind(
+				autocompleteHandler
 			);
 			searchDispatch({
 				type: "SET_SEARCH_CALLBACK",
 				payload: beginSearch,
 			});
 		}
-	}, [autocompletHandler, searchDispatch]);
+	}, [autocompleteHandler, searchDispatch]);
 
 	React.useEffect(() => {
 		if (mapRef.current && state.userLocation?.city) {
@@ -38,7 +41,7 @@ export const MapContainer = React.memo(() => {
 		}
 	}, [mapRef, state.userLocation]);
 
-	const initMap = async () => {
+	const initMap = () => {
 		const map = new window.google.maps.Map(mapRef.current, {
 			streetViewControl: false,
 			mapTypeId: window.google.maps.MapTypeId.ROADMAP,
@@ -59,7 +62,7 @@ export const MapContainer = React.memo(() => {
 			<Sidebar />
 		</Div>
 	);
-});
+};
 
 const loadScript = (
 	url = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_G_MAPS_KEY}&libraries=places&callback=initMap`

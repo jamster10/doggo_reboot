@@ -1,38 +1,38 @@
 import Bottleneck from 'bottleneck';
-
+// import { queryTerms } from './queryTerms'  //maybe config file?
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 200
 });
 
-const search = (service, query, bounds, type) => {
-  return new Promise((resolve, reject) => {
-    const options = { query, bounds, type }
-    service.textSearch(options, function (results, status, pagination) {
-      if (status === 'OK') {
-        resolve(results);
-      } else {
-        reject(status);
-      }
-    })
-
-  }).catch(console.log)
+const queryTerms = {
+  Bars: ['dog', 'bar'],
+  Parks: ['dog', 'park'],
+  "Pet Store": ['', 'pet_store'],
+  Lodging: ['pet-friendly', 'lodging'],
+  Groomers: ['dog', 'spa'],
+  Kennels: ["dog", 'lodging'],
+  Vet: ["dog", "veterinary_care"]
 }
 
-
-export default function searchHandler (service, routeBounds, searchSelections, map, resultsHandler) {
+export default async function searchHandler (placesService, routeBounds, searchSelections, map, resultsHandler) {
   const boundaryCount = routeBounds.length;
 
-  const queryTerms = {
-    Bars: ['dog', 'bar'],
-    Parks: ['dog', 'park'],
-    "Pet Store": ['', 'pet_store'],
-    Lodging: ['pet-friendly', 'lodging'],
-    Groomers: ['dog', 'spa'],
-    Kennels: ["dog", 'lodging'],
-    Vet: ["dog", "veterinary_care"]
+  const search = (query, bounds, type) => {
+    return new Promise((resolve, reject) => {
+      const options = { query, bounds, type }
+      placesService.textSearch(options, function (results, status, pagination) {
+        if (status === 'OK') {
+          resolve(results);
+        } else {
+          reject(status);
+        }
+      })
+
+    }).catch(console.log)
   }
+
 
   const searchSelection = searchSelections();
 
@@ -42,7 +42,7 @@ export default function searchHandler (service, routeBounds, searchSelections, m
 
       // const promise = 
 
-      limiter.schedule(() => search(service, queryTerms[query][0], routeBounds[currentBound], queryTerms[query][1]))
+      limiter.schedule(() => search(placesService, queryTerms[query][0], routeBounds[currentBound], queryTerms[query][1]))
         // .then((result) => {
         //   /* handle result */
         // });

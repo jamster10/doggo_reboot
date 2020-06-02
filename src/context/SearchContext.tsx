@@ -2,15 +2,17 @@ import React from "react";
 import { SearchActionTypes } from "./actions";
 
 export interface Search {
-	beginSearch: () => void;
+	beginSearch: (params: string[]) => void;
 	origin: string | null;
 	destination: string | null;
+	params: string[];
 }
 
-const initialState = {
-	beginSearch: () => null,
+const initialState: Search = {
+	beginSearch: (params: string[]) => null,
 	origin: null,
-	destination: null
+	destination: null,
+	params: [],
 };
 
 export const SearchContext = React.createContext<{
@@ -32,11 +34,12 @@ export const SearchProvider: React.FC = ({ children }) => {
 						...state,
 						beginSearch: action.payload,
 					};
-				case "SET_QUERY_LOCATIONS":
+				case "SET_QUERY":
 					return {
 						...state,
 						origin: action.payload.origin,
 						destination: action.payload.destination,
+						params: action.payload.params,
 					};
 				default:
 					return state;

@@ -1,36 +1,34 @@
-import RouteBoxer from './routeBoxer'
+import RouteBoxer from './routeBoxer';
+import searchHandler from './SearchHandler';
 
 export function AutocompleteDirectionsHandler (map) {
-  let google = window.google
-
+  let google = window.google;
   this.map = map;
   this.originPlaceId = null;
   this.destinationPlaceId = null;
-  this.travelMode = 'DRIVING';
   this.directionsService = new google.maps.DirectionsService();
   this.directionsRenderer = new google.maps.DirectionsRenderer();
   this.directionsRenderer.setMap(map);
-  this.routeBoxArray = []
+  this.routeBoxArray = [];
 
   const originInput = document.getElementById('origin');
   const destinationInput = document.getElementById('destination');
 
-
   const originAutocomplete =
     new google.maps.places.Autocomplete(originInput);
-  // Specify just the place data fields that you need.
   originAutocomplete.setFields(['place_id']);
 
   var destinationAutocomplete =
     new google.maps.places.Autocomplete(destinationInput);
-  // Specify just the place data fields that you need.
   destinationAutocomplete.setFields(['place_id']);
 
   this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
   this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
 
-  const RouteBoxerInstance = RouteBoxer()
-  this.routeBoxer = new RouteBoxerInstance()
+  const RouteBoxerInstance = RouteBoxer();
+  this.routeBoxer = new RouteBoxerInstance();
+
+  this.placesService = new window.google.maps.places.PlacesService(map);
 }
 
 AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
@@ -53,7 +51,7 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
   });
 };
 
-AutocompleteDirectionsHandler.prototype.route = function () {
+AutocompleteDirectionsHandler.prototype.route = function (params) {
   if (!this.originPlaceId || !this.destinationPlaceId) {
     return;
   }
@@ -62,11 +60,17 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     if (status === 'OK') {
       this.directionsRenderer.setDirections(res);
 
+      //create boxes for routeBoxer
       const path = res.routes[0].overview_path;
       const boxes = this.routeBoxer.box(path, 15);
 
+      //remove existing boxes and add new ones
       clearRouteBoxes(this.routeBoxArray);
+
       this.routeBoxArray = drawBoxes(boxes, this.map);
+      //find nearby places using Googles Nearby type search
+      // searchHandler(this.placesService, boxes, params, this.map, this.resultsHandler);
+
     } else {
       //add a error handling function
       window.alert('Directions request failed due to ' + status);
@@ -77,14 +81,13 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     {
       origin: { placeId: this.originPlaceId },
       destination: { placeId: this.destinationPlaceId },
-      travelMode: this.travelMode
+      travelMode: 'DRIVING'
     },
     handleResponse
   );
 };
 
-
-const drawBoxes = (routeboxes, map) => {
+const drawBoxes = (routeboxes, map) =>
   routeboxes.map(item => new window.google.maps.Rectangle({
     bounds: item,
     fillOpacity: 0,
@@ -92,11 +95,12 @@ const drawBoxes = (routeboxes, map) => {
     strokeColor: '#000000',
     strokeWeight: 1,
     map: map
-  }))
-}
+  }));
+
+
 
 const clearRouteBoxes = (boxpolys) => {
-  boxpolys.forEach(item => item.setMap(null))
+  boxpolys.forEach(item => item.setMap(null));
 }
 
 function clearMarkers (markers) {
