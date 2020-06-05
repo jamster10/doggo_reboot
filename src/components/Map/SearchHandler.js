@@ -1,5 +1,4 @@
 import Bottleneck from 'bottleneck';
-import { create } from 'domain';
 // import { queryTerms } from './queryTerms'  //maybe config file?
 
 const limiter = new Bottleneck({
@@ -68,23 +67,34 @@ export default async function searchHandler (placesService, routeBounds, searchS
 }
 
 const createPlaces = (places) => {
-
   return places.reduce((prev, place) => {
-    if (place.business_status && place.business !== 'OPERATIONAL') {
-      return undefined
+    if (place.business_status && place.business_status !== 'OPERATIONAL') {
+      return prev
     }
-
-    return prev.push({
-      address: place.formatted_address,
+    prev.push({
+      address: place.formatted_address || 'unknown address',
       businessStatus: place.business_status || '', //"OPERATIONAL"
       id: place.id,
       name: place.name,
-      isOpen: places.opening_hours.isOpen(),
+      isOpen: place.opening_hours?.open_now || 'unknown hours',
       placeId: place.place_id,
-      priceLevel: String(place.price_level), //num
-      photos: (place.photos && place.photos[0]) || null, //{}[]
-      rating: String(place.rating), //num
-      ratingCount: String(place.user_ratings_total) //num
+      priceLevel: String(place.price_level) || 'unknown price level', //num
+      photos: (place.photos && place.photos[0]).getUrl() || null, //{}[]
+      rating: String(place.rating) || '3', //num
+      ratingCount: String(place.user_ratings_total) || '0' //num
     })
+    return prev
   }, [])
+}
+const dummyPlace = {
+  address: '123 Main St',
+      businessStatus: "OPERATIONAL",
+      id: '23f2efr3453g',
+      name: 'Kristof Bar',
+      isOpen: true,
+      placeId: 'dsdcwef_2s2s',
+      priceLevel: '3',
+      photos: null,
+      rating: "3",
+      ratingCount: '100'
 }
