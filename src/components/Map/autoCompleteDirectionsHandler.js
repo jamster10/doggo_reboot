@@ -1,7 +1,7 @@
 import RouteBoxer from './routeBoxer';
 import searchHandler from './SearchHandler';
 
-export function AutocompleteDirectionsHandler (map) {
+export function AutocompleteDirectionsHandler (map, resultsHandler) {
   let google = window.google;
   this.map = map;
   this.originPlaceId = null;
@@ -10,6 +10,9 @@ export function AutocompleteDirectionsHandler (map) {
   this.directionsRenderer = new google.maps.DirectionsRenderer();
   this.directionsRenderer.setMap(map);
   this.routeBoxArray = [];
+  this.resultsHandler = resultsHandler
+  google.markers = [];
+
 
   const originInput = document.getElementById('origin');
   const destinationInput = document.getElementById('destination');
@@ -18,7 +21,7 @@ export function AutocompleteDirectionsHandler (map) {
     new google.maps.places.Autocomplete(originInput);
   originAutocomplete.setFields(['place_id']);
 
-  var destinationAutocomplete =
+  const destinationAutocomplete =
     new google.maps.places.Autocomplete(destinationInput);
   destinationAutocomplete.setFields(['place_id']);
 
@@ -56,6 +59,7 @@ AutocompleteDirectionsHandler.prototype.route = function (params) {
     return;
   }
 
+
   const handleResponse = (res, status) => {
     if (status === 'OK') {
       this.directionsRenderer.setDirections(res);
@@ -66,10 +70,11 @@ AutocompleteDirectionsHandler.prototype.route = function (params) {
 
       //remove existing boxes and add new ones
       clearRouteBoxes(this.routeBoxArray);
+      clearMarkers()
 
       this.routeBoxArray = drawBoxes(boxes, this.map);
       //find nearby places using Googles Nearby type search
-      // searchHandler(this.placesService, boxes, params, this.map, this.resultsHandler);
+      searchHandler(this.placesService, boxes, params, this.map, this.resultsHandler);
 
     } else {
       //add a error handling function
@@ -103,9 +108,10 @@ const clearRouteBoxes = (boxpolys) => {
   boxpolys.forEach(item => item.setMap(null));
 }
 
-function clearMarkers (markers) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-  markers.length = [];
+function clearMarkers () {
+  window.google.markers.forEach(marker => {
+    marker.setMap(null)
+  })
+
+  window.google.markers.length = 0;
 }

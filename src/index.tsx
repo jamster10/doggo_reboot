@@ -3,18 +3,20 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { SearchProvider, UserProvider } from "./context";
+import { AppProvider, SearchProvider, UserProvider } from "./context";
 import { GlobalStyle } from "./GlobalStyles";
 
 const Root = () => {
 	return (
-		<UserProvider>
-			<SearchProvider>
-				<BrowserRouter>
-					<App />
-				</BrowserRouter>
-			</SearchProvider>
-		</UserProvider>
+		<AppProvider>
+			<UserProvider>
+				<SearchProvider>
+					<BrowserRouter>
+						<App />
+					</BrowserRouter>
+				</SearchProvider>
+			</UserProvider>
+		</AppProvider>
 	);
 };
 

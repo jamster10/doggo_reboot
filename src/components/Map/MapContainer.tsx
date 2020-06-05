@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { SearchContext, UserContext, Search } from "../../context";
+import {
+	AppContext,
+	PlaceData,
+	SearchContext,
+	UserContext,
+} from "../../context";
 import { LoadingGif, Sidebar } from "..";
 import { AutocompleteDirectionsHandler } from "./autoCompleteDirectionsHandler";
 
@@ -9,12 +14,9 @@ interface AutocompleteHandler {
 	route: () => void;
 }
 
-interface Props {
-	searchState: Search;
-}
-
 export const MapContainer = () => {
-	const { state } = React.useContext(UserContext);
+	const { state: userState } = React.useContext(UserContext);
+	const { dispatch: appDispatch } = React.useContext(AppContext);
 	const { dispatch: searchDispatch } = React.useContext(SearchContext);
 
 	const mapRef = React.useRef(null);
@@ -39,10 +41,17 @@ export const MapContainer = () => {
 	}, [autocompleteHandler, searchDispatch]);
 
 	React.useEffect(() => {
-		if (mapRef.current && state.userLocation?.city) {
-			// loadScript();
+		if (mapRef.current && userState.userLocation?.city) {
+			loadScript();
 		}
-	}, [mapRef, state.userLocation]);
+	}, [mapRef, userState.userLocation]);
+
+	const resultsHandler = (resultsBatch: PlaceData[]) => {
+		appDispatch({
+			type: "ADD_PLACES_DATA",
+			payload: resultsBatch,
+		});
+	};
 
 	const initMap = () => {
 		const map = new window.google.maps.Map(mapRef.current, {
@@ -50,12 +59,14 @@ export const MapContainer = () => {
 			mapTypeId: window.google.maps.MapTypeId.ROADMAP,
 			mapTypeControl: false,
 			center: {
-				lat: state.userLocation?.lat,
-				lng: state.userLocation?.lon,
+				lat: userState.userLocation?.lat,
+				lng: userState.userLocation?.lon,
 			},
 			zoom: 8,
 		});
-		setAutocompleteHandler(new AutocompleteDirectionsHandler(map));
+		setAutocompleteHandler(
+			new AutocompleteDirectionsHandler(map, resultsHandler)
+		);
 	};
 	window.initMap = initMap;
 
@@ -82,7 +93,8 @@ const loadScript = (
 };
 
 const MapDiv = styled.div`
-	height: ${({isLoaded}: {isLoaded: boolean}) => isLoaded ? 'calc(100vh - 57px)' : 'calc(100vh - 200px)'}
+	height: ${({ isLoaded }: { isLoaded: boolean }) =>
+		isLoaded ? "calc(100vh - 57px)" : "calc(100vh - 200px)"};
 `;
 
 const LeftSection = styled.div`

@@ -17,7 +17,7 @@ interface CheckboxState {
 	vet: boolean;
 }
 
-const names = ["bars", "parks", "pet store", "lodging", "vet"];
+const names: string[] = ["bars", "parks", "pet store", "lodging", "vet"];
 const initialCheckBoxState: CheckboxState = {
 	bars: false,
 	parks: false,
